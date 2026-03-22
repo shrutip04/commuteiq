@@ -54,6 +54,19 @@ def init_db():
     except Exception:
         pass
 
+    # Emergency contacts table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS emergency_contacts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            name TEXT NOT NULL,
+            phone TEXT NOT NULL,
+            type TEXT NOT NULL DEFAULT 'personal',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        )
+    """)
+
     conn.commit()
     conn.close()
     print("[DB] Database initialized.")

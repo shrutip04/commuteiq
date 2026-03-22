@@ -548,3 +548,75 @@ def cost_options():
         return jsonify(format_response(result))
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+# ── Emergency Response System ──────────────────────────────────────────────────
+
+@api.route("/emergency_contacts", methods=["GET"])
+@require_auth
+def get_emergency_contacts():
+    from emergency import get_contacts
+    db = get_db()
+    try:
+        contacts = get_contacts(db, g.user_id)
+        return jsonify(format_response({"contacts": contacts, "count": len(contacts)}))
+    finally:
+        db.close()
+
+
+@api.route("/emergency_contacts", methods=["POST"])
+@require_auth
+def add_emergency_contact():
+    from emergency import add_contact
+    data = request.get_json() or {}
+    name  = data.get("name", "").strip()
+    phone = data.get("phone", "").strip()
+    ctype = data.get("type", "personal")
+    if not name or not phone:
+        return jsonify({"error": "name and phone are required"}), 400
+    db = get_db()
+    try:
+        contact = add_contact(db, g.user_id, name, phone, ctype)
+        return jsonify(format_response({"contact": contact, "saved": True})), 201
+    finally:
+        db.close()
+
+
+@api.route("/emergency_contacts/<int:contact_id>", methods=["DELETE"])
+@require_auth
+def delete_emergency_contact(contact_id):
+    from emergency import delete_contact
+    db = get_db()
+    try:
+        delete_contact(db, contact_id, g.user_id)
+        return jsonify(format_response({"deleted": True}))
+    finally:
+        db.close()
+
+
+@api.route("/trigger_emergency", methods=["POST"])
+@require_auth
+def trigger_emergency():
+    from emergency import handle_emergency
+    data       = request.get_json() or {}
+    location   = data.get("location", {"lat": 19.076, "lng": 72.877})
+    risk_score = float(data.get("risk_score", 0.8))
+    reason     = data.get("reason", "Emergency triggered by user")
+    db = get_db()
+    try:
+        user = db.execute("SELECT username FROM users WHERE id=?", (g.user_id,)).fetchone()
+        username = user["username"] if user else "User"
+        result = handle_emergency(db, g.user_id, location, risk_score, reason, username)
+        return jsonify(format_response(result))
+    finally:
+        db.close()
+
+
+@api.route("/live_safety_check", methods=["GET"])
+@require_auth
+def live_safety_check_endpoint():
+    from emergency import live_safety_check
+    risk_score = request.args.get("risk_score", type=float)
+    user_mode  = request.args.get("user_mode", "normal")
+    result = live_safety_check(risk_score, user_mode)
+    return jsonify(format_response(result))

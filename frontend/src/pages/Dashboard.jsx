@@ -5,6 +5,8 @@
 import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, IndianRupee, Brain, ChevronRight } from 'lucide-react';
+import EmergencyButton from '../components/EmergencyButton';
+import SafetyMonitor from '../components/SafetyMonitor';
 import Navbar from '../components/Navbar';
 import JourneyForm from '../components/JourneyForm';
 import MapView from '../components/MapView';
@@ -31,6 +33,7 @@ export default function Dashboard() {
   const [userMode, setUserMode]           = useState('normal');
   const [gender, setGender]               = useState('prefer_not_to_say');
   const [activeTab, setActiveTab]         = useState('routes');
+  const [journeyActive, setJourneyActive] = useState(false);
 
   const [loadingRoutes, setLoadingRoutes]           = useState(false);
   const [loadingExplanation, setLoadingExplanation] = useState(false);
@@ -56,7 +59,7 @@ export default function Dashboard() {
       );
       const newRoutes = res.data.routes;
       setRoutes(newRoutes);
-      if (newRoutes.length > 0) handleSelectRoute(newRoutes[0], newRoutes.slice(1));
+      if (newRoutes.length > 0) { handleSelectRoute(newRoutes[0], newRoutes.slice(1)); setJourneyActive(true); }
     } catch (err) {
       console.error('Journey error:', err);
     } finally {
@@ -287,6 +290,16 @@ export default function Dashboard() {
           </div>
         </motion.aside>
       </div>
+      {/* Emergency Button — always visible */}
+      <EmergencyButton selectedRoute={selectedRoute} userMode={userMode} />
+
+      {/* Safety Monitor — background polling */}
+      <SafetyMonitor
+        active={journeyActive}
+        selectedRoute={selectedRoute}
+        userMode={userMode}
+        riskScore={selectedRoute?.risk?.current_pct ? selectedRoute.risk.current_pct / 100 : null}
+      />
     </div>
   );
 }
