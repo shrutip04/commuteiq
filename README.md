@@ -358,7 +358,7 @@ Hackathon-appropriate. The schema is clean enough to migrate to PostgreSQL with 
 
 ## 👩‍💻 Built By
 
-**Shruti** — Full-stack development, ML integration, Mumbai transit data, UI/UX design
+**Shruti Pawar** & **Snehal Patil** — Full-stack development, ML integration, Mumbai transit data, UI/UX design
 
 *Built for hackathon — March 2026*
 
