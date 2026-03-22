@@ -605,3 +605,5 @@ def generate_routes_with_transit(source: str, destination: str, time_str: str, p
         routes.sort(key=lambda r: r["travel_time"]*0.5 + r["crowding_pct"]*0.3 - r["confidence_score"]*20)
 
     return routes
+
+    #cd routes
