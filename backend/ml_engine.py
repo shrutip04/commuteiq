@@ -10,11 +10,17 @@ import random
 import numpy as np
 
 try:
-    import pandas as pd
     from sklearn.ensemble import RandomForestRegressor
     from sklearn.model_selection import train_test_split
-    from sklearn.preprocessing import LabelEncoder
+    import numpy as np
     ML_AVAILABLE = True
+    # pandas optional - use numpy arrays if not available
+    try:
+        import pandas as pd
+        PANDAS_AVAILABLE = True
+    except ImportError:
+        PANDAS_AVAILABLE = False
+        print("[ML] pandas not available. Using numpy arrays.")
 except ImportError:
     ML_AVAILABLE = False
     print("[ML] scikit-learn not available. Using rule-based fallback.")
