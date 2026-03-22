@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: #05051a;
+    color: white;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Time input dark mode */
+  input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.4);
+    cursor: pointer;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .font-body {
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+/* Leaflet overrides */
+.leaflet-container {
+  background: #07071f !important;
+  font-family: 'DM Sans', sans-serif !important;
+}
+
+.leaflet-control-zoom {
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  background: rgba(10, 10, 40, 0.9) !important;
+  color: rgba(255,255,255,0.6) !important;
+  border: none !important;
+  width: 30px !important;
+  height: 30px !important;
+  line-height: 30px !important;
+  font-size: 16px !important;
+  transition: all 0.2s !important;
+}
+
+.leaflet-control-zoom-in:hover,
+.leaflet-control-zoom-out:hover {
+  background: rgba(124, 58, 237, 0.3) !important;
+  color: white !important;
+}
+
+.leaflet-control-attribution {
+  background: rgba(5, 5, 26, 0.7) !important;
+  color: rgba(255,255,255,0.3) !important;
+  font-size: 9px !important;
+  border-radius: 8px 0 0 0 !important;
+}
+
+.leaflet-control-attribution a {
+  color: rgba(124, 58, 237, 0.7) !important;
+}
